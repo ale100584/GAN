@@ -10,6 +10,7 @@ It can use any keras model as generator and discriminator. They only have to com
 1. The shape of the generator input has to match the noise_shape
 2. The shape of the generator output has to match the discriminator input and the training set (the size of mnist image in the folllowing example)
 3. The output of the discriminator has to be binary 
+
 I included generators.py and discriminators.py to collect my models
 
 ```python
