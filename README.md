@@ -1,10 +1,16 @@
 # GAN
 My first attempt with Generative Adversarial Networks. 
 
-It allwow to create a Gan object to train a Generative adversarial network (https://en.wikipedia.org/wiki/Generative_adversarial_network).
+It allows to create a Gan object to train a Generative adversarial network (https://en.wikipedia.org/wiki/Generative_adversarial_network).
 A gan consists of a generator and a discriminator, the generator tries to trick the discriminator making it believe that the generated data is actually real. Both discriminator and generator are continuosly learning.
 
 # How to use it
+## Train a GAN
+It can use any keras model as generator and discriminator. They only have to comply with these constrains:
+1. The shape of the generator input has to match the noise_shape
+2. The shape of the generator output has to match the discriminator input and the training set (the size of mnist image in the folllowing example)
+3. The output of the discriminator has to be binary 
+I included generators.py and discriminators.py to collect my models
 
 ```python
 import tensorflow as tf
@@ -31,3 +37,14 @@ mnist_gan = gan.Gan(generator, discriminator,noise_shape)
 # Traning
 mnist_gan.train(x_train, epochs=10000, batch_size=128, save_interval=200)
 ```
+
+## Visualize results
+The following code visulizes the results by loading a previously saved generator
+```python
+from GAN import utils
+
+utils.mnist_visaulize_generator_output('generator_3000.hdf5')
+```
+
+## Aknowledgments
+I've done this mostly as a training excersize to learn GANs so I lost track of other repos and websites I copied for this work, so apologies to those I copied from and didn;t aknowledged.
