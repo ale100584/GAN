@@ -43,8 +43,10 @@ The following code visulizes the results by loading a previously saved generator
 ```python
 from GAN import utils
 
-utils.mnist_visaulize_generator_output('generator_3000.hdf5')
+utils.mnist_visaulize_generator_output('generator_final.hdf5')
 ```
+This is the result:
+![Result Image](https://i.imgur.com/N8csSEu.png)
 
 ## Aknowledgments
 I've done this mostly as a training excersize to learn GANs so I lost track of other repos and websites I copied from for this work, so apologies to those I copied from and didn't aknowledged.
