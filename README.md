@@ -46,6 +46,8 @@ from GAN import utils
 utils.mnist_visaulize_generator_output('generator_final.hdf5')
 ```
 This is the result:
+
+
 ![Result Image](https://i.imgur.com/N8csSEu.png)
 
 ## Aknowledgments
