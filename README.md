@@ -2,7 +2,7 @@
 My first attempt with Generative Adversarial Networks. 
 
 It allows to create a Gan object to train a Generative adversarial network (https://en.wikipedia.org/wiki/Generative_adversarial_network).
-A gan consists of a generator and a discriminator, the generator tries to trick the discriminator making it believe that the generated data is actually real. Both discriminator and generator are continuosly learning.
+A gan consists of a generator and a discriminator, the generator tries to trick the discriminator into making it believe that the generated data is actually real. Both discriminator and generator are continuosly learning.
 
 # How to use it
 ## Train a GAN
