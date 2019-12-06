@@ -6,7 +6,7 @@ class Gan():
     '''
     A class to implement a Generative Adversarial Network
 
-    input:
+    Input:
     - generator: a keras model that will be used as generator
     - discriminator: a keras model that will be used as discriminator
     - input_shape: a tuple that specifies the shape of the generator input
@@ -47,7 +47,17 @@ class Gan():
                          optimizer=tf.keras.optimizers.RMSprop(lr=0.0002, rho=0.9))
 
 
-    def train(self, X_train, epochs, batch_size=128, save_interval=50):
+    def train(self, x_train, epochs, batch_size=128, save_interval=50):
+        '''
+        Trains the GAN
+
+        Inputs:
+        - x_train:
+        - epochs:
+        - batch_size:
+        - save_interval:
+        '''
+
         # input checks
         if not isinstance(batch_size, int):
             raise ValueError("batch_size is not an integer")
@@ -62,28 +72,13 @@ class Gan():
 
             # Discriminator
             # Select a random half the batch size of images
-            idx = np.random.randint(0, X_train.shape[0], half_batch_size)
-            imgs = X_train[idx]
+            idx = np.random.randint(0, x_train.shape[0], half_batch_size)
+            imgs = x_train[idx]
 
-            noise = np.random.normal(0, 1, (half_batch_size,)+self.input_shape)
+            noise_batch_disc = np.random.normal(0, 1, (half_batch_size,)+self.input_shape)
+            noise_batch_gen = np.random.normal(0, 1, (batch_size,)+self.input_shape)
 
-            # Generate a half batch of new images
-            gen_imgs = self.generator.predict(noise)
-
-            # Train the discriminator
-            d_loss_real = self.discriminator.train_on_batch(imgs, np.ones((half_batch_size, 1)))
-            d_loss_fake = self.discriminator.train_on_batch(gen_imgs, np.zeros((half_batch_size, 1)))
-            d_loss = np.mean([d_loss_real, d_loss_fake], 0)
-
-            # Generator
-            # We use the whole GAN model, we feed random noise and we want the generated images to be labeled as
-            # valid (1)
-            noise = np.random.normal(0, 1, (batch_size,)+self.input_shape)
-
-            valid_y = np.array([1] * batch_size)
-
-            # Train the generator
-            g_loss = self.gan.train_on_batch(noise, valid_y)
+            d_loss, g_loss = self.train_on_batch(imgs, noise_batch_disc, noise_batch_gen)
 
             # Print the progress
             print("epoch: {} [D loss: {}, acc.: {:.2f}] [G loss: {}]".format(epoch, d_loss[0], 100 * d_loss[1], g_loss))
@@ -97,6 +92,33 @@ class Gan():
         self.save_generator("final")
         self.save_discriminator("final")
 
+    def train_on_batch(self, x_train_batch, input_gen_batch_disc, input_gen_batch_gen):
+        '''
+        Trains the GAN (first discriminator then generator) on a batch of data
+
+        Inputs:
+        - x_train_batch: batch of original data for training the discriminator
+        - input_gen_batch_disc: input of generator used for discriminator training
+        - input_gen_batch_gen: input of generator used for generator training
+        '''
+
+        # Generate a batch of new images
+        gen_imgs = self.generator.predict(input_gen_batch_disc)
+
+        # Train the discriminator
+        d_loss_real = self.discriminator.train_on_batch(x_train_batch, np.ones((len(x_train_batch), 1)))
+        d_loss_fake = self.discriminator.train_on_batch(gen_imgs, np.zeros((len(gen_imgs), 1)))
+        d_loss = np.mean([d_loss_real, d_loss_fake], 0)
+
+        # Generator
+        # We use the whole GAN model, we feed random noise and we want the generated images to be labeled as
+        # valid (1)
+        valid_y = np.array([1] * len(input_gen_batch_gen))
+
+        # Train the generator
+        g_loss = self.gan.train_on_batch(input_gen_batch_gen, valid_y)
+
+        return d_loss, g_loss
 
     def save_generator(self, epoch):
         self.generator.save('generator_{}.hdf5'.format(epoch))
