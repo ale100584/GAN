@@ -5,7 +5,8 @@ It allows to create a Gan object to train a Generative adversarial network (http
 A gan consists of a generator and a discriminator, the generator tries to trick the discriminator into making it believe that the generated data is actually real. Both discriminator and generator are continuosly learning.
 
 # How to use it
-## Train a GAN
+## Train a simple GAN
+### Code
 It can use any keras model as generator and discriminator. They only have to comply with these constraints:
 1. The shape of the generator input has to match the noise_shape
 2. The shape of the generator output has to match the discriminator input and the training set (the size of mnist image in the folllowing example)
@@ -39,7 +40,7 @@ mnist_gan = gan.Gan(generator, discriminator,noise_shape)
 mnist_gan.train(x_train, epochs=10000, batch_size=128, save_interval=200)
 ```
 
-## Visualize results
+### Visualize results
 The following code visulizes the results by loading a previously saved generator
 ```python
 from GAN import utils
@@ -51,5 +52,8 @@ This is the result:
 
 ![Result Image](https://i.imgur.com/N8csSEu.png)
 
+## Conditional GAN
+### Code
+### Visualize Results
 ## Aknowledgments
 I've done this mostly as a training excersize to learn GANs so I lost track of other repos and websites I copied from for this work, so apologies to those I copied from and didn't aknowledged.
